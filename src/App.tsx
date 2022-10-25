@@ -10,6 +10,11 @@ type ProductProps = {
 
 function App() {
   const [products, setProducts] = useState<ProductProps[]>([]);
+  const [newProduct, setNewProduct] = useState<{
+    name: string;
+    marca: string;
+  }>({ name: "", marca: "" });
+  console.log({ newProduct });
 
   useEffect(() => {
     fetch("http://localhost:3000/product", {
@@ -30,7 +35,7 @@ function App() {
   const handlePost = async () => {
     const res = await fetch("http://localhost:3000/product", {
       method: "POST",
-      body: JSON.stringify({ name: "Test", marca: "Marca Test" }),
+      body: JSON.stringify(newProduct),
       headers: {
         // Accept: "application/json",
         "Content-Type": "application/json",
@@ -51,7 +56,10 @@ function App() {
           Data:
           {products.map((item: ProductProps, index: number) => {
             return (
-              <div key={`item-${index}`}>
+              <div
+                key={`item-${index}`}
+                style={{ backgroundColor: "rgb(124, 228, 231)" }}
+              >
                 <p>
                   Nombre: <span>{item.name}</span>
                 </p>
@@ -67,7 +75,29 @@ function App() {
         <button className="btn" onClick={handlePost}>
           POST
         </button>
-        <p>Data:{""}</p>
+        <br />
+        <label htmlFor="">
+          Nombre:
+          <input
+            type="text"
+            onChange={(e) => {
+              setNewProduct((prev) => {
+                return { ...prev, name: e.target.value };
+              });
+            }}
+          />
+        </label>
+        <label htmlFor="">
+          Marca:
+          <input
+            type="text"
+            onChange={(e) => {
+              setNewProduct((prev) => {
+                return { ...prev, marca: e.target.value };
+              });
+            }}
+          />
+        </label>
       </section>
       <section className="section put">
         <button className="btn">PUT</button>
