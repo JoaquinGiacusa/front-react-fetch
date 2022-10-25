@@ -5,16 +5,16 @@ import "./App.css";
 type ProductProps = {
   name: string;
   marca: string;
-  id: number;
+  id?: number;
 };
 
 function App() {
   const [products, setProducts] = useState<ProductProps[]>([]);
-  const [newProduct, setNewProduct] = useState<{
-    name: string;
-    marca: string;
-  }>({ name: "", marca: "" });
-  console.log({ newProduct });
+  const [newProduct, setNewProduct] = useState<ProductProps>({
+    name: "",
+    marca: "",
+  });
+  const [editModal, setEditMoral] = useState<Boolean>(false);
 
   useEffect(() => {
     fetch("http://localhost:3000/product", {
@@ -28,85 +28,67 @@ function App() {
   const handleGet = async () => {
     const res = await fetch("http://localhost:3000/product");
     const data = await res.json();
-    console.log("GET");
-
     setProducts(data);
   };
-  const handlePost = async () => {
+
+  const handleOnSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
     const res = await fetch("http://localhost:3000/product", {
       method: "POST",
       body: JSON.stringify(newProduct),
       headers: {
-        // Accept: "application/json",
         "Content-Type": "application/json",
       },
     });
     const data = await res.json();
-    console.log("POST");
-    console.log(data);
+
+    setProducts((prev) => {
+      return [...prev, data];
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //@ts-ignore
+    newProduct[e.target.name] = e.target.value;
+    setNewProduct({ ...newProduct });
   };
 
   return (
     <div className="App">
-      <section className="section get">
-        <button className="btn" onClick={handleGet}>
-          GET
-        </button>
+      <section className="product-container">
         <div>
           Data:
           {products.map((item: ProductProps, index: number) => {
             return (
-              <div
-                key={`item-${index}`}
-                style={{ backgroundColor: "rgb(124, 228, 231)" }}
-              >
+              <div key={`item-${index}`} className={"product-card"}>
+                {editModal && (
+                  <div>
+                    <input type="text" name="name" />
+                    <input type="text" name="marca" />
+                  </div>
+                )}
                 <p>
                   Nombre: <span>{item.name}</span>
                 </p>
                 <p>
                   Marca:<span>{item.marca}</span>
                 </p>
+                <div>
+                  <button onClick={() => setEditMoral(!editModal)}>
+                    Editar
+                  </button>
+                </div>
               </div>
             );
           })}
         </div>
       </section>
-      <section className="section post">
-        <button className="btn" onClick={handlePost}>
-          POST
-        </button>
-        <br />
-        <label htmlFor="">
-          Nombre:
-          <input
-            type="text"
-            onChange={(e) => {
-              setNewProduct((prev) => {
-                return { ...prev, name: e.target.value };
-              });
-            }}
-          />
-        </label>
-        <label htmlFor="">
-          Marca:
-          <input
-            type="text"
-            onChange={(e) => {
-              setNewProduct((prev) => {
-                return { ...prev, marca: e.target.value };
-              });
-            }}
-          />
-        </label>
-      </section>
-      <section className="section put">
-        <button className="btn">PUT</button>
-        <p>Data:{""}</p>
-      </section>
-      <section className="section delete">
-        <button className="btn">DELETE</button>
-        <p>Data:{""}</p>
-      </section>
+      <form onSubmit={handleOnSubmit}>
+        <input type="text" name="name" onChange={handleChange} />
+        <input type="text" name="marca" onChange={handleChange} />
+        <button type="submit">Crear nuevo</button>
+      </form>
     </div>
   );
 }
