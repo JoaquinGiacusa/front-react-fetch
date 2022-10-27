@@ -34,7 +34,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
     )
       .then((result) => result.json())
       .then((data) => {
-        // return data;
         setModalStatus(!modalStatus);
         window.location.reload();
       });
@@ -47,16 +46,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
       `https://express-example-production-b3eb.up.railway.app/product/${id}`,
       {
         method: "DELETE",
-        // body: JSON.stringify(inputs),
         headers: {
           "Content-Type": "application/json",
         },
       }
     )
       .then((result) => result.json())
-      .then((data) => {
-        // return data;
-        // setModalStatus(!modalStatus);
+      .then(() => {
         window.location.reload();
       });
   };

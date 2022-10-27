@@ -21,7 +21,7 @@ function App() {
       <section className="product-container">
         <h1 className="products-title">Lista de productos:</h1>
 
-        {products.map((item: ProductProps, index: number) => {
+        {products.map((item: ProductProps) => {
           return (
             <ProductCard
               key={item.id}
@@ -32,13 +32,8 @@ function App() {
           );
         })}
       </section>
-      {/* <form onSubmit={handleOnSubmit}>
-        <input type="text" name="name" onChange={handleChange} />
-        <input type="text" name="marca" onChange={handleChange} />
-        <button type="submit">Crear nuevo</button>
-      </form> */}
       <CreateProductForm
-        producToAdd={(data: any) => {
+        producToAdd={(data) => {
           setProducts([...products, data]);
         }}
       ></CreateProductForm>
