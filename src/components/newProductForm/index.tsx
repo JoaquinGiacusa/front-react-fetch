@@ -3,25 +3,27 @@ import "./index.css";
 import { ProductProps } from "src/types/Products";
 
 type CreateProductProps = {
-  producToAdd: (value: ProductProps) => void;
+  producCreated: () => void;
 };
 
-const CreateProductForm: React.FC<CreateProductProps> = ({ producToAdd }) => {
+const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
   const [newProduct, setNewProduct] = useState<ProductProps>({
     name: "",
     marca: "",
   });
+  const [reqStatus, setReqStatus] = useState({ message: "" });
+  //  console.log(reqStatus);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
     newProduct[e.target.name] = e.target.value;
     setNewProduct({ ...newProduct });
+    setReqStatus({ message: "" });
   };
 
   const handleOnSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (newProduct.name == "" || newProduct.marca == "") return;
-    console.log("get:", newProduct);
+    //if (newProduct.name == "" || newProduct.marca == "") return;
 
     const res = await fetch(
       "https://express-example-production-b3eb.up.railway.app/product",
@@ -34,8 +36,11 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producToAdd }) => {
       }
     );
     const data = await res.json();
+    if (data?.message != "") {
+      setReqStatus(data);
+    }
 
-    producToAdd(data);
+    producCreated();
     setNewProduct({
       name: "",
       marca: "",
@@ -61,6 +66,11 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producToAdd }) => {
         placeholder={"Marca"}
         value={newProduct.marca}
       />
+      {reqStatus && (
+        <div style={{ fontSize: "12px", color: "red" }}>
+          {reqStatus?.message}
+        </div>
+      )}
       <button type="submit" className="button">
         Crear
       </button>

@@ -6,6 +6,7 @@ import CreateProductForm from "./components/newProductForm";
 
 function App() {
   const [products, setProducts] = useState<ProductProps[]>([]);
+  const [reFetchCount, setReFetchCount] = useState<number>(0);
 
   useEffect(() => {
     fetch(`https://express-example-production-b3eb.up.railway.app/product`, {
@@ -14,7 +15,7 @@ function App() {
       .then((response) => response.json())
       .then((result) => setProducts(result))
       .catch((error) => console.log("error", error));
-  }, []);
+  }, [reFetchCount]);
 
   return (
     <div className="App">
@@ -28,13 +29,20 @@ function App() {
               name={item.name}
               marca={item.marca}
               id={item.id}
+              productChanged={() => {
+                setReFetchCount((prev) => {
+                  return prev + 1;
+                });
+              }}
             ></ProductCard>
           );
         })}
       </section>
       <CreateProductForm
-        producToAdd={(data) => {
-          setProducts([...products, data]);
+        producCreated={() => {
+          setReFetchCount((prev) => {
+            return prev + 1;
+          });
         }}
       ></CreateProductForm>
     </div>

@@ -7,21 +7,29 @@ type ProductCardProps = {
   name: string;
   marca: string;
   id?: number;
+  productChanged: () => void;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  name,
+  marca,
+  id,
+  productChanged,
+}) => {
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [inputs, setInputs] = useState({ name, marca });
+  const [reqStatus, setReqStatus] = useState({ message: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //@ts-ignore
-    inputs[e.target.name] = e.target.value;
+    inputs[e.target.name as keyof typeof inputs] = e.target.value;
     setInputs({ ...inputs });
+    setReqStatus({ message: "" });
   };
 
   const handleSubmitModal = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputs.name == "" || inputs.marca == "") return;
+    if (inputs.name == "" || inputs.marca == "")
+      return setReqStatus({ message: "Debes completar todos los campos" });
 
     fetch(
       `https://express-example-production-b3eb.up.railway.app/product/${id}`,
@@ -35,8 +43,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
     )
       .then((result) => result.json())
       .then((data) => {
+        if (data?.message != "") {
+          setReqStatus(data);
+        }
         setModalStatus(!modalStatus);
-        window.location.reload();
+        productChanged();
       });
   };
 
@@ -51,8 +62,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
       }
     )
       .then((result) => result.json())
-      .then(() => {
-        window.location.reload();
+      .then((data) => {
+        console.log("DELETE", data);
+
+        productChanged();
       });
   };
 
@@ -75,6 +88,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
               value={inputs.marca}
               onChange={handleChange}
             />
+            {reqStatus && (
+              <div style={{ fontSize: "12px", color: "red" }}>
+                {reqStatus?.message}
+              </div>
+            )}
             <div className="buttons-container">
               <button type="submit">Guardar</button>
               <button
