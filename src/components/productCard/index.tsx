@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import EditElement from "../icons/edit";
+import TrashElement from "../icons/trash";
 import "./index.css";
 
 type ProductCardProps = {
@@ -10,7 +12,6 @@ type ProductCardProps = {
 const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [inputs, setInputs] = useState({ name, marca });
-  console.log({ inputs });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
@@ -40,8 +41,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
   };
 
   const handleDelete = () => {
-    console.log("delete");
-
     fetch(
       `https://express-example-production-b3eb.up.railway.app/product/${id}`,
       {
@@ -101,12 +100,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ name, marca, id }) => {
       </div>
 
       <div className="icons-container">
-        <img
-          className="icon"
-          src={"./edit.svg"}
+        <EditElement
           onClick={() => setModalStatus(!modalStatus)}
-        ></img>
-        <img className="icon" src={"./trash.svg"} onClick={handleDelete}></img>
+          className={"icon"}
+        />
+        <TrashElement className="icon" onClick={handleDelete}></TrashElement>
       </div>
     </article>
   );
