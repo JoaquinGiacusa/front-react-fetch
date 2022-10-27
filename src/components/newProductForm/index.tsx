@@ -20,6 +20,8 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producToAdd }) => {
 
   const handleOnSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (newProduct.name == "" || newProduct.marca == "") return;
+    console.log("get:", newProduct);
 
     const res = await fetch(
       "https://express-example-production-b3eb.up.railway.app/product",
