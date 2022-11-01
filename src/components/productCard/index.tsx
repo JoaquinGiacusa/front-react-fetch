@@ -32,7 +32,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       return setReqStatus({ message: "Debes completar todos los campos" });
 
     fetch(
-      `https://express-example-production-b3eb.up.railway.app/product/${id}`,
+      `https://express-example-production-4d54.up.railway.app/product/${id}`,
       {
         method: "PUT",
         body: JSON.stringify(inputs),
@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleDelete = () => {
     fetch(
-      `https://express-example-production-b3eb.up.railway.app/product/${id}`,
+      `https://express-example-production-4d54.up.railway.app/product/${id}`,
       {
         method: "DELETE",
         headers: {

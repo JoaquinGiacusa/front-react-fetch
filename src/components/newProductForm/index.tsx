@@ -26,7 +26,7 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
     //if (newProduct.name == "" || newProduct.marca == "") return;
 
     const res = await fetch(
-      "https://express-example-production-b3eb.up.railway.app/product",
+      "https://express-example-production-4d54.up.railway.app/product",
       {
         method: "POST",
         body: JSON.stringify(newProduct),
