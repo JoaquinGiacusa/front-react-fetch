@@ -7,6 +7,8 @@
   padding: 10px;
   background-color: #f2f8f9;
   max-width: 30em;
+  margin-left: 12px;
+  margin-top: 10px;
 }
 
 .searcher-container input {

@@ -5,11 +5,14 @@ import { ProductProps } from "./types/Products";
 import CreateProductForm from "./components/newProductForm";
 import SearcherComp from "./components/searcher";
 import ResultSearch from "./components/results-search";
-// import { Routes, Route, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function App() {
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [reFetchCount, setReFetchCount] = useState<number>(0);
+  // console.log(products);
+  let [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get("search");
 
   useEffect(() => {
     fetch(`https://express-example-production-4d54.up.railway.app/product`, {
@@ -24,24 +27,25 @@ function App() {
     <div className="App">
       <section className="product-container">
         <SearcherComp></SearcherComp>
-        <ResultSearch></ResultSearch>
-        <h1 className="products-title">Lista de productos:</h1>
-
-        {products.map((item: ProductProps) => {
-          return (
-            <ProductCard
-              key={item.id}
-              name={item.name}
-              marca={item.marca}
-              id={item.id}
-              productChanged={() => {
-                setReFetchCount((prev) => {
-                  return prev + 1;
-                });
-              }}
-            ></ProductCard>
-          );
-        })}
+        {query ? (
+          <ResultSearch></ResultSearch>
+        ) : (
+          products?.map((item: ProductProps) => {
+            return (
+              <ProductCard
+                key={item.id}
+                name={item.name}
+                marca={item.marca}
+                id={item.id}
+                productChanged={() => {
+                  setReFetchCount((prev) => {
+                    return prev + 1;
+                  });
+                }}
+              ></ProductCard>
+            );
+          })
+        )}
       </section>
       <CreateProductForm
         producCreated={() => {

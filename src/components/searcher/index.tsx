@@ -13,7 +13,7 @@ const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch }) => {
 
   const handleOnSerach = () => {
     if (inputValue.trim() === "") return;
-    setSearchParams({ search: inputValue });
+    setSearchParams({ search: inputValue, limit: "4", offset: "0" });
     setInputValue("");
   };
   return (

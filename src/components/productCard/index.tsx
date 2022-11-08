@@ -7,7 +7,7 @@ type ProductCardProps = {
   name: string;
   marca: string;
   id?: number;
-  productChanged: () => void;
+  productChanged?: () => void;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -47,7 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           setReqStatus(data);
         }
         setModalStatus(!modalStatus);
-        productChanged();
+        productChanged && productChanged();
       });
   };
 
@@ -65,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       .then((data) => {
         console.log("DELETE", data);
 
-        productChanged();
+        productChanged && productChanged();
       });
   };
 
