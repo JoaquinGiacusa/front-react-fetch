@@ -1,25 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditElement from "../icons/edit";
 import TrashElement from "../icons/trash";
 import "./index.css";
 import { fetchAPI } from "src/lib/api";
 
-type ProductCardProps = {
+type ModalProps = {
   name: string;
   brand: string;
   id?: number;
+  open: boolean;
   productChanged?: () => void;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const Modal: React.FC<ModalProps> = ({
   name,
   brand,
   id,
   productChanged,
+  open,
 }) => {
-  const [modalStatus, setModalStatus] = useState<boolean>(false);
+  const [modalStatus, setModalStatus] = useState<boolean>();
   const [inputs, setInputs] = useState({ name, brand });
   const [reqStatus, setReqStatus] = useState({ message: "" });
+  console.log({ modalStatus });
+
+  useEffect(() => {
+    setModalStatus(open);
+  }, [open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     inputs[e.target.name as keyof typeof inputs] = e.target.value;
@@ -58,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <article>
+    <div>
       {modalStatus && (
         <div className="modal-container">
           <form onSubmit={handleSubmitModal} className="modal">
@@ -86,7 +93,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <button
                 className="cancel"
                 type="button"
-                onClick={() => setModalStatus(!modalStatus)}
+                onClick={() => {
+                  setModalStatus(false);
+                }}
               >
                 Cancelar
               </button>
@@ -94,26 +103,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </form>
         </div>
       )}
-      <div className="data-container">
-        <label>
-          <p>Nombre:</p>
-          <span>{name}</span>
-        </label>
-        <label>
-          <p>Marca:</p>
-          <span>{brand}</span>
-        </label>
-      </div>
-
-      <div className="icons-container">
-        <EditElement
-          onClick={() => setModalStatus(!modalStatus)}
-          className={"icon"}
-        />
-        <TrashElement className="icon" onClick={handleDelete}></TrashElement>
-      </div>
-    </article>
+    </div>
   );
 };
 
-export default ProductCard;
+export default Modal;

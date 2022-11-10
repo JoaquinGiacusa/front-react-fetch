@@ -3,46 +3,50 @@ import { useSearchParams } from "react-router-dom";
 import ProductCard from "../productCard";
 import { ProductProps } from "../../types/Products";
 import "./index.css";
+import { fetchAPI } from "src/lib/api";
 
-type ResultSearchProp = {};
+type ResultSearchProp = {
+  refresh: any;
+};
 
-const ResultSearch: React.FC<ResultSearchProp> = () => {
+const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
   let [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsloading] = useState<Boolean>(true);
+  const query = searchParams.get("search") || "";
+  const page = Number(searchParams.get("page")) || 1;
+
+  const [isLoading, setIsloading] = useState<boolean>(true);
+
   const [result, setResult] = useState([]);
-  const query = searchParams.get("search");
-  const limit = searchParams.get("limit");
-  const offset = searchParams.get("offset");
   const [reFetchCount, setReFetchCount] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState(
-    offset === "0" ? 1 : Number(offset) / 4 + 1
-  );
-  console.log({ currentPage, offset });
+
+  const [totalPages, setTotalPages] = useState<number>();
+
+  const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
-    if (query != null) console.log("cambie");
+    setSearchParams({
+      search: query as string,
+      page: currentPage.toString(),
+    });
+    setReFetchCount((prev) => prev + 1);
+  }, [currentPage]);
 
-    fetch(
-      `https://express-example-production-4d54.up.railway.app/search?q=${query}&limit=${limit}&offset=${offset}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("llege aca");
-        console.log(data.serachResult);
-        setResult(data.serachResult);
-
-        setIsloading(false);
-      });
-  }, [query, reFetchCount, currentPage]);
+  useEffect(() => {
+    fetchAPI(
+      `/product?search=${query || ""}&limit=${"4"}&page=${currentPage}`
+    ).then((data) => {
+      if (data.result.length == 0) {
+        setCurrentPage((prev) => (prev = 1));
+      }
+      setResult(data.result);
+      setTotalPages(data.totalPage);
+      setIsloading(false);
+    });
+  }, [reFetchCount, query, page, refresh]);
 
   /////////
-  let maxPages = 10;
   let items = [];
-  let leftSide = currentPage - 2;
-  if (leftSide <= 0) leftSide = 1;
-  let rightSide = currentPage + 2;
-  if (rightSide > maxPages) rightSide = maxPages;
-  for (let number = leftSide; number <= rightSide; number++) {
+  for (let number = 1; number <= totalPages!; number++) {
     items.push(
       <div
         key={number}
@@ -51,6 +55,7 @@ const ResultSearch: React.FC<ResultSearchProp> = () => {
         }
         onClick={() => {
           setCurrentPage(number);
+          setReFetchCount((prev) => prev + 1);
         }}
       >
         {number}
@@ -58,33 +63,17 @@ const ResultSearch: React.FC<ResultSearchProp> = () => {
     );
   }
 
-  // useEffect(() => {
-  //   setSearchParams({
-  //     search: query as string,
-  //     limit: limit as string,
-  //     offset: (currentPage * 4).toString(),
-  //   });
-  // }, [currentPage]);
-
   const prevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      setSearchParams({
-        search: query as string,
-        limit: limit as string,
-        offset: (Number(offset) - 4).toString(),
-      });
+      setReFetchCount((prev) => prev + 1);
     }
   };
 
   const nextPage = () => {
-    if (currentPage < maxPages) {
+    if (currentPage < totalPages!) {
       setCurrentPage(currentPage + 1);
-      setSearchParams({
-        search: query as string,
-        limit: limit as string,
-        offset: (currentPage * 4).toString(),
-      });
+      setReFetchCount((prev) => prev + 1);
     }
   };
 
@@ -94,32 +83,30 @@ const ResultSearch: React.FC<ResultSearchProp> = () => {
         <div>Cargando</div>
       ) : result?.length > 0 ? (
         <div>
-          {result?.map((item: ProductProps) => {
-            return (
-              <ProductCard
-                key={item.id}
-                name={item.name}
-                marca={item.marca}
-                id={item.id}
-                productChanged={() => {
-                  setReFetchCount((prev) => prev + 1);
-                }}
-              />
-            );
-          })}
+          <div className="cards-container">
+            {result?.map((item: ProductProps) => {
+              return (
+                <ProductCard
+                  key={item.id}
+                  name={item.name}
+                  brand={item.brand}
+                  id={item.id}
+                  productChanged={() => {
+                    setReFetchCount((prev) => prev + 1);
+                  }}
+                />
+              );
+            })}
+          </div>
           <div className="pagination-container">
             <div className="flex-container">
-              <div> currentPage : {currentPage} </div>
-
               <div className="paginate-ctn">
                 <div className="round-effect" onClick={prevPage}>
-                  {" "}
-                  &lsaquo;{" "}
+                  &lsaquo;
                 </div>
                 {items}
                 <div className="round-effect" onClick={nextPage}>
-                  {" "}
-                  &rsaquo;{" "}
+                  &rsaquo;
                 </div>
               </div>
             </div>
@@ -127,7 +114,7 @@ const ResultSearch: React.FC<ResultSearchProp> = () => {
         </div>
       ) : (
         <div>
-          No se encontraron resultados para:{" "}
+          No se encontraron resultados para:
           <span style={{ fontWeight: "bold" }}>{query}</span>
         </div>
       )}

@@ -1,5 +1,5 @@
 export type ProductProps = {
   name: string;
-  marca: string;
+  brand: string;
   id?: number;
 };

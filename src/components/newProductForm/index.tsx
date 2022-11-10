@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./index.css";
 import { ProductProps } from "src/types/Products";
+import { fetchAPI } from "src/lib/api";
+import Modal from "../modal";
 
 type CreateProductProps = {
   producCreated: () => void;
@@ -9,10 +11,11 @@ type CreateProductProps = {
 const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
   const [newProduct, setNewProduct] = useState<ProductProps>({
     name: "",
-    marca: "",
+    brand: "",
   });
   const [reqStatus, setReqStatus] = useState({ message: "" });
   //  console.log(reqStatus);
+  const [modalStatus, setModalStatus] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
@@ -23,58 +26,35 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
 
   const handleOnSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    //if (newProduct.name == "" || newProduct.marca == "") return;
+    //if (newProduct.name == "" || newProduct.brand == "") return;
 
-    const res = await fetch(
-      "https://express-example-production-4d54.up.railway.app/product",
-      {
-        method: "POST",
-        body: JSON.stringify(newProduct),
-        headers: {
-          "Content-Type": "application/json",
-        },
+    fetchAPI("/product", { method: "POST", body: newProduct }).then((data) => {
+      if (data?.message != "") {
+        setReqStatus(data);
       }
-    );
-    const data = await res.json();
-    if (data?.message != "") {
-      setReqStatus(data);
-    }
+    });
 
     producCreated();
     setNewProduct({
       name: "",
-      marca: "",
+      brand: "",
     });
   };
 
   return (
-    <form className="new-product-container" onSubmit={handleOnSubmit}>
-      <h3 className="new-product-title">Crear nuevo producto:</h3>
-      <input
-        className="input"
-        type="text"
-        name="name"
-        onChange={handleChange}
-        placeholder={"Nombre"}
-        value={newProduct.name}
-      />
-      <input
-        className="input"
-        type="text"
-        name="marca"
-        onChange={handleChange}
-        placeholder={"Marca"}
-        value={newProduct.marca}
-      />
-      {reqStatus && (
-        <div style={{ fontSize: "12px", color: "red" }}>
-          {reqStatus?.message}
-        </div>
-      )}
-      <button type="submit" className="button">
-        Crear
+    <div>
+      <button
+        onClick={() => {
+          console.log("xd", modalStatus);
+
+          setModalStatus(true);
+        }}
+        className="new-product-button"
+      >
+        +
       </button>
-    </form>
+      {<Modal name={""} brand={""} open={modalStatus}></Modal>}
+    </div>
   );
 };
 

@@ -1,14 +1,11 @@
 .searcher-container {
-  /* position: relative; */
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* justify-content: center; */
   padding: 10px;
   background-color: #f2f8f9;
+  width: 100%;
   max-width: 30em;
-  margin-left: 12px;
-  margin-top: 10px;
 }
 
 .searcher-container input {

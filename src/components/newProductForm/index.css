@@ -1,4 +1,23 @@
+.new-product-button {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: rgb(241, 240, 240);
+  font-size: 45px;
+  margin: 0;
+  color: rgb(82, 80, 80);
+}
+
 .new-product-container {
+  background-color: rgb(145, 137, 130, 0.6);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.new-product-form {
   width: 100%;
   max-width: 15em;
   background-color: #f2f8f9;
@@ -16,6 +35,7 @@
   transition: all 0.1s ease-out;
   margin: 0 auto;
   margin-top: 66px;
+  /* display: none; */
 }
 
 @media (max-width: 700px) {

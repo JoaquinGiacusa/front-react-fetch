@@ -1,9 +1,18 @@
 .App {
-  display: grid;
+  /* display: grid;
   grid-template-columns: 550px 300px;
   font-size: 16px;
-  gap: 10px;
+  gap: 10px; */
   /* margin: 10px; */
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 10px 5px;
 }
 
 @media (max-width: 900px) {
