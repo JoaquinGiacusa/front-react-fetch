@@ -5,9 +5,10 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 type SearcherCompProp = {
   onSearch?: (value: string) => void;
+  className: string;
 };
 
-const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch }) => {
+const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch, className }) => {
   const [inputValue, setInputValue] = useState<string>("");
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -17,7 +18,7 @@ const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch }) => {
     setInputValue("");
   };
   return (
-    <div className="searcher-container">
+    <div className={`searcher-container ${className}`}>
       <input
         type="text"
         placeholder="Buscar..."
@@ -25,9 +26,7 @@ const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch }) => {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleOnSerach()}
       />
-      {/* <button type="submit"> */}
       <SearchIcon className="search-icon" onClick={handleOnSerach}></SearchIcon>
-      {/* </button> */}
     </div>
   );
 };

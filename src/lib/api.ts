@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://express-example-production-4d54.up.railway.app";
 
 export async function fetchAPI(input: RequestInfo, options?: any) {
   const url = BASE_URL + input;
@@ -11,11 +12,12 @@ export async function fetchAPI(input: RequestInfo, options?: any) {
   }
 
   const res = await fetch(url, newOptions);
+  const data = await res.json();
 
   if (res.status >= 200 && res.status < 300) {
-    const data = await res.json();
     return data;
   } else {
-    return { message: "Hubo un error", status: res.status };
+    console.log(data);
+    return { message: data.message, status: res.status };
   }
 }

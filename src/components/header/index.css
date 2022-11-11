@@ -1,0 +1,12 @@
+.header {
+  width: 100%;
+}
+
+.header-content {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}

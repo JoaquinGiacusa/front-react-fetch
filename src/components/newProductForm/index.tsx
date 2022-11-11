@@ -6,6 +6,7 @@ import Modal from "../modal";
 
 type CreateProductProps = {
   producCreated: () => void;
+  className?: string;
 };
 
 const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
@@ -14,8 +15,6 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
     brand: "",
   });
   const [reqStatus, setReqStatus] = useState({ message: "" });
-  //  console.log(reqStatus);
-  const [modalStatus, setModalStatus] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //@ts-ignore
@@ -26,34 +25,53 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
 
   const handleOnSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    //if (newProduct.name == "" || newProduct.brand == "") return;
 
     fetchAPI("/product", { method: "POST", body: newProduct }).then((data) => {
-      if (data?.message != "") {
-        setReqStatus(data);
-      }
-    });
+      console.log(data);
+      console.log("product created");
+      if (data?.message) {
+        console.log("eroeroerre");
 
-    producCreated();
-    setNewProduct({
-      name: "",
-      brand: "",
+        setReqStatus(data);
+      } else {
+        console.log("product created");
+
+        producCreated();
+        setNewProduct({
+          name: "",
+          brand: "",
+        });
+      }
     });
   };
 
   return (
-    <div>
-      <button
-        onClick={() => {
-          console.log("xd", modalStatus);
-
-          setModalStatus(true);
-        }}
-        className="new-product-button"
-      >
-        +
-      </button>
-      {<Modal name={""} brand={""} open={modalStatus}></Modal>}
+    <div className="new-product-container">
+      <form onSubmit={handleOnSubmit} className="new-product-form">
+        <h3>Crear Producto:</h3>
+        <input
+          type="text"
+          placeholder="Nombre"
+          name="name"
+          // value={inputs.name}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          placeholder="Marca"
+          name="brand"
+          // value={inputs.brand}
+          onChange={handleChange}
+        />
+        {reqStatus && (
+          <div style={{ fontSize: "15px", color: "#bb0b0b" }}>
+            {reqStatus?.message}
+          </div>
+        )}
+        <button className="submit-btn" type="submit">
+          Guardar
+        </button>
+      </form>
     </div>
   );
 };

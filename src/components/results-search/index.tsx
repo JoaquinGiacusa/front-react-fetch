@@ -80,7 +80,10 @@ const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
   return (
     <div>
       {isLoading ? (
-        <div>Cargando</div>
+        <div className="lds-circle">
+          <div></div>
+          <p>Cargando...</p>
+        </div>
       ) : result?.length > 0 ? (
         <div>
           <div className="cards-container">
