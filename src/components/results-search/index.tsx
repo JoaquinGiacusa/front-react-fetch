@@ -34,6 +34,7 @@ const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
     ).then((data) => {
       if (data.result.length == 0) {
         setCurrentPage((prev) => (prev = 1));
+        setIsloading(false);
       } else {
         setResult(data.result);
         setTotalPages(data.totalPage);
