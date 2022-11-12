@@ -17,7 +17,6 @@ export async function fetchAPI(input: RequestInfo, options?: any) {
   if (res.status >= 200 && res.status < 300) {
     return data;
   } else {
-    console.log(data);
     return { message: data.message, status: res.status };
   }
 }

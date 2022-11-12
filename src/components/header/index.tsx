@@ -19,18 +19,16 @@ const Header: React.FC<HeaderProps> = ({ refresh }) => {
         >
           +
         </button>
-        <SearcherComp className="search-comp"></SearcherComp>
+        <SearcherComp></SearcherComp>
       </div>
-      <div className="new-product-container">
-        {modalStatus && (
-          <CreateProductForm
-            producCreated={() => {
-              setModalStatus(false);
-              refresh();
-            }}
-          ></CreateProductForm>
-        )}
-      </div>
+      {modalStatus && (
+        <CreateProductForm
+          producCreated={() => {
+            setModalStatus(false);
+            refresh();
+          }}
+        ></CreateProductForm>
+      )}
     </header>
   );
 };

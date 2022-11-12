@@ -17,9 +17,6 @@
   color: inherit;
   height: 32px;
   width: 100%;
-
-  /* border: 1px solid transparent; */
-  /* border-radius: 5px; */
 }
 
 .searcher-container input:focus {
@@ -27,17 +24,12 @@
 }
 
 .searcher-container input::placeholder {
-  /* border: none; */
   color: #bbb;
 }
 
 .searcher-container .search-icon {
-  /* width: 100px; */
-  /* z-index: 100; */
-  /* overflow: hidden; */
-  /* width: 40px; */
   padding: 0;
-  /* border: 1px solid transparent; */
+
   border-radius: inherit;
   background-color: #f2f8f9;
 }

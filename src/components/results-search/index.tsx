@@ -6,21 +6,17 @@ import "./index.css";
 import { fetchAPI } from "src/lib/api";
 
 type ResultSearchProp = {
-  refresh: any;
+  refresh: () => void;
 };
 
 const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
   let [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("search") || "";
   const page = Number(searchParams.get("page")) || 1;
-
   const [isLoading, setIsloading] = useState<boolean>(true);
-
   const [result, setResult] = useState([]);
   const [reFetchCount, setReFetchCount] = useState<number>(0);
-
   const [totalPages, setTotalPages] = useState<number>();
-
   const [currentPage, setCurrentPage] = useState(page);
 
   useEffect(() => {
@@ -32,15 +28,17 @@ const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
   }, [currentPage]);
 
   useEffect(() => {
+    setIsloading(true);
     fetchAPI(
       `/product?search=${query || ""}&limit=${"4"}&page=${currentPage}`
     ).then((data) => {
       if (data.result.length == 0) {
         setCurrentPage((prev) => (prev = 1));
+      } else {
+        setResult(data.result);
+        setTotalPages(data.totalPage);
+        setIsloading(false);
       }
-      setResult(data.result);
-      setTotalPages(data.totalPage);
-      setIsloading(false);
     });
   }, [reFetchCount, query, page, refresh]);
 
@@ -102,15 +100,13 @@ const ResultSearch: React.FC<ResultSearchProp> = ({ refresh }) => {
             })}
           </div>
           <div className="pagination-container">
-            <div className="flex-container">
-              <div className="paginate-ctn">
-                <div className="round-effect" onClick={prevPage}>
-                  &lsaquo;
-                </div>
-                {items}
-                <div className="round-effect" onClick={nextPage}>
-                  &rsaquo;
-                </div>
+            <div className="paginate-ctn">
+              <div className="round-effect" onClick={prevPage}>
+                &lsaquo;
+              </div>
+              {items}
+              <div className="round-effect" onClick={nextPage}>
+                &rsaquo;
               </div>
             </div>
           </div>

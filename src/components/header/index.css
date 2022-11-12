@@ -10,3 +10,16 @@
   align-items: center;
   justify-content: center;
 }
+
+.new-product-button {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: rgb(241, 240, 240);
+  font-size: 45px;
+  margin: 0;
+  color: rgb(82, 80, 80);
+}
+.new-product-button:hover {
+  transform: scale(0.9);
+}

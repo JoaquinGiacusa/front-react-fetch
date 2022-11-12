@@ -31,14 +31,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.preventDefault();
     if (inputs.name == "" || inputs.brand == "")
       return setReqStatus({ message: "Debes completar todos los campos" });
-    console.log({ inputs });
 
     fetchAPI(`/product/${id}`, {
       method: "PUT",
       body: inputs,
     }).then((data) => {
-      console.log("PUT", data);
-
       if (data?.message != "") {
         setReqStatus(data);
       }
@@ -51,8 +48,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     fetchAPI(`/product/${id}`, {
       method: "DELETE",
     }).then((data) => {
-      console.log("DELETE", data);
-
       productChanged && productChanged();
     });
   };

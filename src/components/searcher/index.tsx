@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import SearchIcon from "../icons/search";
 import "./index.css";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 type SearcherCompProp = {
   onSearch?: (value: string) => void;
-  className: string;
 };
 
-const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch, className }) => {
+const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch }) => {
   const [inputValue, setInputValue] = useState<string>("");
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -18,7 +17,7 @@ const SearcherComp: React.FC<SearcherCompProp> = ({ onSearch, className }) => {
     setInputValue("");
   };
   return (
-    <div className={`searcher-container ${className}`}>
+    <div className="searcher-container">
       <input
         type="text"
         placeholder="Buscar..."

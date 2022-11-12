@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import "./index.css";
 import { ProductProps } from "src/types/Products";
 import { fetchAPI } from "src/lib/api";
-import Modal from "../modal";
 
 type CreateProductProps = {
   producCreated: () => void;
-  className?: string;
 };
 
 const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
@@ -27,15 +25,9 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
     e.preventDefault();
 
     fetchAPI("/product", { method: "POST", body: newProduct }).then((data) => {
-      console.log(data);
-      console.log("product created");
       if (data?.message) {
-        console.log("eroeroerre");
-
         setReqStatus(data);
       } else {
-        console.log("product created");
-
         producCreated();
         setNewProduct({
           name: "",
@@ -53,14 +45,12 @@ const CreateProductForm: React.FC<CreateProductProps> = ({ producCreated }) => {
           type="text"
           placeholder="Nombre"
           name="name"
-          // value={inputs.name}
           onChange={handleChange}
         />
         <input
           type="text"
           placeholder="Marca"
           name="brand"
-          // value={inputs.brand}
           onChange={handleChange}
         />
         {reqStatus && (

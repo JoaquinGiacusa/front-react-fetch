@@ -10,16 +10,13 @@
 }
 
 .pagination-container {
-}
-
-.flex-container {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
 
-.flex-container > div {
+.pagination-container > div {
   padding-top: 10px;
 }
 .paginate-ctn {
